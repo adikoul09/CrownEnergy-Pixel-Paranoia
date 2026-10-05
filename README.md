@@ -15,7 +15,7 @@ numbered certificate in your name.
 This is the second version of a project I first made in **April 2026** for **Design Paradox, the
 UI & Product Design Challenge run by CSI VIT**. Our team won **first place** with that version.
 
-This version was rebuilt for **Pixel Paranoia at DJSCE**. It keeps the April idea, story, cans
+This version is rebuilt for **Pixel Paranoia at DJSCE**. It keeps the April idea, story, cans
 and colours, and changes how the site is built and how it behaves.
 
 | | April version (CSI VIT) | This version (DJSCE) |
