@@ -1,26 +1,480 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+/* ───────────────────────────────────────────────────────────
+   Crown Energy — design tokens
+   Every value here is documented in DESIGN.md §2–§4.
+   Contrast for each text pairing is verified by scripts/contrast.mjs.
+   ─────────────────────────────────────────────────────────── */
+
+@theme {
+  /* The palette is the April build's (index.html): ink, ivory, Rolex green, gold.
+     Sections alternate between the ink vault and ivory paper; the navigation
+     bar is green. Token names are roles — `ink-*` is the surface, `bone-*` the
+     text on it — and the .surface-* scopes below re-point them, so a component
+     reads correctly on whichever surface it is placed. */
+
+  /* Ink — the vault (April --ink, --ink-soft). */
+  --color-ink-0: #080704;
+  --color-ink-1: #0f0d09;
+  --color-ink-2: #15130e;
+  --color-ink-3: #1a1812;
+
+  /* Bone — text on ink. Ivory, never clinical white. */
+  --color-bone: #faf8f3;
+  --color-bone-2: #aca698;
+  --color-bone-3: #8b8578;
+
+  /* Gold — April --gold / --gold-light. Hairlines, numerals, the one earned word. */
+  --color-gold: #b8941f;
+  --color-gold-hi: #d4af37;
+  --color-gold-lo: #9a7b1a;
+  --color-gold-hair: rgb(184 148 31 / 0.3);
+  --color-gold-faint: rgb(184 148 31 / 0.14);
+  /* The earned word in a headline (display sizes only). */
+  --color-earned: #d4af37;
+
+  /* Rolex green — April --green / --green-deep. The navigation bar. */
+  --color-green: #006039;
+  --color-green-deep: #003d20;
+
+  /* Ivory — April --ivory / --ivory-warm. Paper sections. */
+  --color-ivory: #faf8f3;
+  --color-ivory-warm: #f5f0e6;
+
+  /* Laurel — green as an indicator of state: progress and choice in the
+     allocation flow, one ring on the certification seal. ≥ 3:1 on its surface
+     (WCAG 1.4.11). April --green-light on ink; --green on ivory. */
+  --color-laurel: #00804d;
+
+  /* Signal — form errors only, always paired with text. */
+  --color-signal: #d98b76;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Garamond, Georgia, serif;
+  --font-sans: var(--font-jost), Futura, "Helvetica Neue", Arial, sans-serif;
+  --font-label: var(--font-syncopate), var(--font-jost), "Helvetica Neue", Arial, sans-serif;
+  --font-figure: var(--font-playfair), "Playfair Display", Georgia, serif;
+
+  /* Type scale */
+  --text-display-xl: clamp(3.25rem, 7vw, 7.5rem);
+  --text-display-xl--line-height: 0.95;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-l: clamp(2.75rem, 5vw, 5rem);
+  --text-display-l--line-height: 1;
+  --text-display-l--letter-spacing: -0.015em;
+  --text-display-m: clamp(2rem, 3.2vw, 3.25rem);
+  --text-display-m--line-height: 1.08;
+  --text-display-m--letter-spacing: -0.01em;
+  --text-title: 1.5rem;
+  --text-title--line-height: 1.3;
+  --text-body-l: 1.125rem;
+  --text-body-l--line-height: 1.7;
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.6;
+  --text-label--letter-spacing: 0.2em;
+
+  --tracking-wordmark: 0.2em;
+
+  --ease-precision: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --container-catalog: 90rem;
+  --container-prose: 34rem;
+}
+
+/* shadcn/ui semantic slots, mapped onto the Crown Energy palette */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-ink-0);
+  --foreground: var(--color-bone);
+  --card: var(--color-ink-1);
+  --card-foreground: var(--color-bone);
+  --popover: var(--color-ink-0);
+  --popover-foreground: var(--color-bone);
+  --primary: var(--color-gold);
+  --primary-foreground: var(--color-ink-0);
+  --secondary: var(--color-ink-2);
+  --secondary-foreground: var(--color-bone);
+  --muted: var(--color-ink-2);
+  --muted-foreground: var(--color-bone-2);
+  --accent: var(--color-ink-2);
+  --accent-foreground: var(--color-bone);
+  --destructive: var(--color-signal);
+  --border: var(--color-gold-hair);
+  --input: rgb(250 248 243 / 0.22);
+  --ring: var(--color-gold-hi);
+  --radius: 0rem;
+
+  /* Layout */
+  --nav-h: 4rem;
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+  --section-y: clamp(8rem, 18vh, 14rem);
+
+  /* Contact shadow beneath a can */
+  --can-floor: rgb(0 0 0 / 0.85);
+
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Surfaces ──────────────────────────────────────────────
+   A section opts into a surface; everything inside it inherits the re-pointed
+   tokens. Every pairing is checked in scripts/contrast.mjs. */
+
+/* Ivory paper (April .collection, .ambassadors, .legacy). */
+.surface-ivory,
+.surface-warm {
+  --color-ink-0: #faf8f3;
+  --color-ink-1: #f5f0e6;
+  --color-ink-2: #efe8d9;
+  --color-ink-3: #e6ddc9;
+  --color-bone: #080704;
+  --color-bone-2: #47423a;
+  --color-bone-3: #625c50;
+  /* Gold darkens on paper: April's ivory-section tag colour. */
+  --color-gold: #735c20;
+  --color-gold-hi: #5c4813;
+  --color-gold-lo: #9a7b1a;
+  --color-gold-hair: rgb(122 98 36 / 0.34);
+  --color-gold-faint: rgb(122 98 36 / 0.16);
+  --color-earned: #9a7b1a;
+  --color-laurel: #006039;
+  --color-signal: #a4442c;
+  --input: rgb(8 7 4 / 0.3);
+  --can-floor: rgb(58 44 12 / 0.4);
+  color-scheme: light;
+  background-color: var(--color-ink-0);
+  color: var(--color-bone);
+}
+/* Warm ivory: the same paper, one shade deeper, for a following section. */
+.surface-warm {
+  --color-ink-0: #f5f0e6;
+  --color-ink-1: #efe8d9;
+  --color-ink-2: #e9e1cf;
+  --color-ink-3: #e0d6c0;
+}
+
+/* Back to the vault inside paper (e.g. a dark panel on an ivory page). */
+.surface-ink {
+  --color-ink-0: #080704;
+  --color-ink-1: #0f0d09;
+  --color-ink-2: #15130e;
+  --color-ink-3: #1a1812;
+  --color-bone: #faf8f3;
+  --color-bone-2: #aca698;
+  --color-bone-3: #8b8578;
+  --color-gold: #b8941f;
+  --color-gold-hi: #d4af37;
+  --color-gold-lo: #9a7b1a;
+  --color-gold-hair: rgb(184 148 31 / 0.3);
+  --color-gold-faint: rgb(184 148 31 / 0.14);
+  --color-earned: #d4af37;
+  --color-laurel: #00804d;
+  --color-signal: #d98b76;
+  --input: rgb(250 248 243 / 0.22);
+  --can-floor: rgb(0 0 0 / 0.85);
+  color-scheme: dark;
+  color: var(--color-bone);
+}
+
+/* The lacquered edition plates (April .c-green / .c-gold / .c-noir): text sits
+   on the lightest part of each gradient, so every tone is lifted to clear it. */
+.surface-plate {
+  --color-bone: #faf8f3;
+  --color-bone-2: #ece6d8;
+  --color-bone-3: #dad3c2;
+  --color-gold: #e8d48b;
+  --color-gold-hi: #f6ebc4;
+  --color-gold-hair: rgb(232 212 139 / 0.4);
+  --color-gold-faint: rgb(232 212 139 / 0.18);
+  --color-earned: #e8d48b;
+  --can-floor: rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+  color: var(--color-bone);
+}
+.plate-verdant-chrona {
+  background-image: linear-gradient(165deg, #005a30 0%, #002815 60%, #001a0d 100%);
+}
+.plate-aurum-cycle {
+  background-image: linear-gradient(165deg, #6e5510 0%, #3d2e06 60%, #1f1803 100%);
+}
+.plate-noir-kinetic {
+  background-image: linear-gradient(165deg, #1a1916 0%, #0b0b09 60%, #020201 100%);
+}
+
+/* The green bar. Gold text is lifted to pale gold to clear the green. */
+.surface-green {
+  --color-bone: #faf8f3;
+  --color-bone-2: #d9e6de;
+  --color-gold: #d4af37;
+  --color-gold-hi: #e8d48b;
+  color-scheme: dark;
+  background-color: var(--color-green);
+  color: var(--color-bone);
+}
+
+@media (prefers-contrast: more) {
+  :root,
+  .surface-ink {
+    --color-bone-3: var(--color-bone-2);
+    --color-gold-hair: rgb(184 148 31 / 0.6);
+    --color-gold-faint: rgb(184 148 31 / 0.32);
+  }
+  .surface-ivory,
+  .surface-warm {
+    --color-bone-3: var(--color-bone-2);
+    --color-gold-hair: rgb(122 98 36 / 0.65);
+    --color-gold-faint: rgb(122 98 36 / 0.36);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    background: var(--color-ink-0);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-ink-0 font-sans text-body text-bone antialiased;
+    font-weight: 400;
+    min-height: 100svh;
+  }
+  ::selection {
+    background: rgb(184 148 31 / 0.32);
+    color: var(--color-bone);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-gold-hi);
+    outline-offset: 4px;
+  }
+  /* Radix and native controls inherit the same ring */
+  [data-slot] :focus-visible,
+  [data-slot]:focus-visible {
+    outline: 1px solid var(--color-gold-hi);
+    outline-offset: 4px;
+    box-shadow: none;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* ── Utilities ─────────────────────────────────────────────── */
+
+/* The catalogue voice: Syncopate capitals (April's label face), set at 12px —
+   the floor for any text — rather than April's 7–8px. */
+@utility label {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Reference numerals: tabular, lining, like a caseback engraving. */
+@utility tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+@utility wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: var(--tracking-wordmark);
+  text-transform: uppercase;
+}
+
+@utility gutter {
+  padding-inline: var(--gutter);
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+@utility catalog {
+  width: 100%;
+  max-width: var(--container-catalog);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Cut into the surface rather than printed on it: a dark lip above, a faint
+   catch-light below. Used only on the certificate's numerals. Screen only. */
+@utility engraved {
+  text-shadow:
+    0 -1px 0 rgb(0 0 0 / 0.9),
+    0 1px 0 rgb(255 244 214 / 0.14);
+}
+
+/* The earned word: one per headline, italic, gold. */
+@utility earned {
+  font-style: italic;
+  color: var(--color-earned);
+}
+
+/* Figures set large — years, counts, allocation numbers (April's Playfair stats). */
+@utility figure {
+  font-family: var(--font-figure);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* The certificate seal's cut edge — the same light, applied to strokes. Screen only. */
+.seal-engraved {
+  filter: drop-shadow(0 -0.6px 0 rgb(0 0 0 / 0.9)) drop-shadow(0 0.8px 0 rgb(255 244 214 / 0.16));
+}
+
+/* Visible on focus only — skip link */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-ink-0);
+  color: var(--color-bone);
+  border: 1px solid var(--color-gold-hair);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Native date input on the vault */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85) sepia(0.4);
+  cursor: pointer;
+}
+
+/* ── Recording mode (/take) ────────────────────────────────── */
+html[data-take] .site-footer {
+  display: none;
+}
+html[data-take="waiting"] .site-nav {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+html[data-take] .site-nav {
+  transition: opacity 1.2s var(--ease-precision) 2.4s;
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ── Print: the certificate, and only the certificate ─────── */
+@media print {
+  /* No page margin: the browser then prints no header or footer (date, URL,
+     page count). The 12mm of white is the body's padding instead. */
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #fff !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  body {
+    padding: 12mm !important;
+  }
+  /* Everything that neither holds the certificate nor sits inside it leaves the
+     layout entirely, so nothing else can take up a page. */
+  body *:not(:has(.certificate)):not(.certificate):not(.certificate *) {
+    display: none !important;
+  }
+  body :has(.certificate) {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    background: none !important;
+    transform: none !important;
+  }
+  /* One page: the sheet less its 12mm margins (210 − 24 = 186mm), 2mm spare. */
+  .certificate {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    height: 184mm;
+    overflow: hidden;
+    break-inside: avoid;
+    margin: 0 !important;
+    color: #050505 !important;
+    background: #fff !important;
+    border-color: #a88b4a !important;
+  }
+  .certificate [data-print-ink] {
+    color: #050505 !important;
+  }
+  .certificate [data-print-gold] {
+    color: #7a6224 !important;
+    stroke: #7a6224 !important;
+  }
+  /* Engraving is light on a dark surface; on paper it is simply ink. */
+  .certificate .engraved,
+  .certificate .seal-engraved {
+    text-shadow: none !important;
+    filter: none !important;
+  }
+  .certificate [data-print-hide] {
+    display: none !important;
+  }
 }
