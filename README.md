@@ -1,85 +1,131 @@
 # Crown Energy
 
-**A Crown for Every Achievement.** This is a conceptual luxury brand experience: Rolex's first
-entry into consumables, presented as three numbered, certified editions that are allocated
-against achievement rather than sold.
+**A Crown for Every Achievement.**
 
-Built for **Pixel Paranoia · DJSCE**. It is a concept and is not affiliated with or endorsed by
-Rolex SA.
+Crown Energy imagines Rolex launching its first consumable: an energy drink in three editions.
+You don't buy a can. You ask for one by telling the brand what you achieved, and you receive a
+numbered certificate in your name.
 
-The design system, motion specification, rationale, take storyboard and the audit of the April
-build are all in **[DESIGN.md](./DESIGN.md)**.
+**Live site:** [crown-energy.vercel.app](https://crown-energy.vercel.app/)
 
-## Run
+---
+
+## Where this project comes from
+
+This is the second version of a project I first made in **April 2026** for **Design Paradox, the
+UI & Product Design Challenge run by CSI VIT**. Our team won **first place** with that version.
+
+This version was rebuilt for **Pixel Paranoia at DJSCE**. It keeps the April idea, story, cans
+and colours, and changes how the site is built and how it behaves.
+
+| | April version (CSI VIT) | This version (DJSCE) |
+|---|---|---|
+| Built as | One HTML file | A full website with separate pages |
+| Pages | One long page | Home, the Collection, a page for each edition, and the request page |
+| The cans | Shown on cards with a price | Each can has its own page with its story, details and certification seal |
+| Getting a can | An email waitlist | A three-step request that ends in a printable certificate |
+| Opening of the site | A loading screen, then the page | No loading screen: the crown, headline and cans appear in one continuous scroll |
+| Animation | Constant looping (spinning rings, floating can) | Motion only when you scroll, hover or click |
+| Readability | Labels as small as 7px; light grey text that was hard to read | Nothing smaller than 12px; every text colour passes accessibility contrast checks |
+| Phones | Desktop layout squeezed down | Layouts designed for phone, tablet and desktop |
+
+---
+
+## The idea
+
+Rolex has never made anything you consume. We asked what it would look like if it did, and
+answered with a drink presented the way Rolex presents a watch:
+
+- **Reference numbers** on every can, like a watch reference.
+- **A certification seal** awarded to each can, like a chronometer certificate.
+- **A green menu bar, gold detailing and the crown**, taken from Rolex's own visual language.
+- **No prices on the shelf.** The price is "disclosed on allocation", and you are asked what you
+  achieved before you are asked who you are.
+
+---
+
+## The three editions
+
+| | Verdant Chrona | Aurum Cycle | Noir Kinetic |
+|---|---|---|---|
+| Reference | 351.087 | 351.212 | 351.304 |
+| Honours | **Effort**: work sustained over time | **Milestone**: a moment of arrival | **Discipline**: what you do when no one is watching |
+| Line on the can | "For the long work." | "For the moment it is recognised." | "For the hours no one sees." |
+| Colour | Green | Gold | Black |
+| Engraving | Chronometric orbit | Astrolabe | Compass star |
+| Flavour notes | Green tea, yuzu peel, alpine herbs | Saffron, white peach, honeyed citrus | Black cherry, cacao husk, smoked vanilla |
+
+All three: 330 ml, a first edition of 2,026 numbered cans.
+
+---
+
+## The story told on the site
+
+- **2023: The Geneva Protocol.** A Rolex research team in Geneva asks one question: could
+  precision be consumed?
+- **2024: Testing the limit.** 351 formulations are made. Eight are selected. Trials confirm four
+  hours of steady focus.
+- **2025: The certification year.** Three editions are finalised, and each can receives the Crown
+  Certification.
+- **2026: The global unveiling.** Numbered first editions are released, and access is granted one
+  achievement at a time.
+
+---
+
+## What you'll find on the site
+
+**Home page**, from top to bottom:
+1. **The opening.** The crown and the headline appear on black. As you scroll, Noir Kinetic rises
+   under a rotating watch bezel, then the other two cans join it. Click any can to open its page.
+2. **Philosophy.** "Energy is not consumption. It is recognition." The three kinds of achievement,
+   each linked to its can.
+3. **The Chronicle.** Hans Wilsdorf, Rolex's founder, and the 2023–2026 story.
+4. **The Calibre.** The four ingredients, described like the parts of a watch movement.
+5. **Certification.** The seal, and the four checks every can passes.
+6. **The Standard.** Five people whose achievements need no introduction: Roger Federer, Lewis
+   Hamilton, Tiger Woods, Leonardo DiCaprio and Coco Gauff.
+7. **The Register.** Entries recording what people achieved, from Vienna, Mumbai, Dublin and
+   Zürich. Hover over or tap an entry to read its story.
+8. **The Invitation.** The photoshoot of the three cans, and the button to request one.
+
+**The Collection.** The three editions side by side, each on its own coloured panel.
+
+**Edition pages.** One per can: the can at full size, its story, a full specification table and
+its certification seal.
+
+**Requesting a can.** Three questions, one per screen:
+1. What are you marking: effort, a milestone or discipline? (This suggests a can, which you can
+   change.)
+2. Describe the achievement in one sentence, and give its date.
+3. Your name and email.
+
+You then receive a **Certificate of Recognition** with your name, your achievement, your edition
+and an allocation number out of 2,026. It prints on a single A4 page. Nothing you enter is saved
+or sent anywhere.
+
+---
+
+## Run it on your own laptop
+
+You need [Node.js](https://nodejs.org/) (version 20 or newer) and Git.
 
 ```bash
+git clone https://github.com/adikoul09/Crown-Energy.git
+cd Crown-Energy
 npm install
-npm run dev        # http://localhost:3000
-npm run build && npm start   # production
+npm run dev
 ```
 
-Requires Node 20.9+.
+Then open **http://localhost:3000** in your browser.
 
-## Routes
+---
 
-| Route | What it is |
-|---|---|
-| `/` | **The Unveiling** (scroll-driven hero), then Philosophy, Chronicle, Calibre, Certification, The Standard, the Register and the Invitation |
-| `/editions` | The Collection: three collectible plates |
-| `/editions/[slug]` | The Dossier for one edition (`verdant-chrona`, `aurum-cycle`, `noir-kinetic`) |
-| `/allocation` | Request an allocation, ending in a printable certificate. `?edition=<slug>` preselects an edition |
-| `/take` | Recording mode: the Unveiling as one scripted, continuous take |
+## More detail
 
-## Recording the single take
+The colours, fonts, spacing, animation rules and the reasoning behind each design decision are
+written up in **[DESIGN.md](./DESIGN.md)**.
 
-1. `npm run build && npm start`.
-2. Open Chrome fullscreen at 1920×1080 (or 1440×900) with zoom at 100%.
-3. Go to **`/take?delay=3`**. It starts after 3s of black with no on-screen prompt.
-   Plain `/take` waits for any key instead.
-4. Start recording during the black frame, at 60 fps.
-5. Stop about 2s after the Noir Kinetic dossier settles. The run is about 25s.
+---
 
-The full timeline and shot list are in DESIGN.md §10.
-
-## Checks
-
-```bash
-npm run check      # contrast (every text/background token pairing ≥ WCAG AA) + typecheck + lint
-```
-
-## Stack
-
-- **Framework:** Next.js 16 (App Router, Turbopack) and React 19.
-- **Styling:** Tailwind CSS v4, with tokens in `app/globals.css`.
-- **Components:** shadcn/ui on Radix, restyled. The primitives used are Button, RadioGroup,
-  Input, Textarea, Label and Sheet.
-- **Motion:** Motion (`motion/react`) with `LazyMotion`.
-- **Validation:** zod.
-
-## Structure
-
-```
-app/                 routes, layout, globals.css (tokens), allocation server action
-components/
-  brand/             CrownMark (the crown render), Seal, Arrow
-  edition/           Can (the can renders), RefNumber, EditionPlate, SpecSheet
-  hero/              Unveiling, Bezel, TakeDirector
-  motion/            springs (tokens), Reveal / MaskLines / Hairline, Flight (cross-route can)
-  sections/          landing chapters I–VII, Portrait, RegisterRow
-  allocation/        AllocationFlow, Certificate
-  nav/               SiteNav (green bar, pale-gold active rule), SiteFooter
-  ui/                shadcn primitives, restyled
-assets/              the project's imagery: cans/ and brand/ (cropped renders), people/, photography/
-lib/                 editions (single source of truth), assets (cans, crown), people (photographs),
-                     register, allocation (schema, numbering)
-scripts/contrast.mjs
-```
-
-## What is stubbed
-
-The allocation flow validates on the server, but **stores and sends nothing**. `store()` in
-`lib/allocation.ts` is an intentional no-op, and the UI tells visitors so.
-
-Allocation numbers are deterministic, derived from email and edition, so there are no invented
-counters. Connect a database and a mailer at `store()` before any real use. The entries in the
-Register are illustrative.
+*Crown Energy is a student design concept. It is not affiliated with or endorsed by Rolex SA or
+by any of the people pictured.*
